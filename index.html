@@ -602,18 +602,11 @@ const inventory = [
   {model:"Dell Precision 5560 Corei7-11850H 32Gb 512GB NVIDIA RTX A200 4K Touch WinPro", ask:725, offer:594.5, badge:"precision", series:"precision", tags:["touchscreen"]},
 ];
 
-// Image map (loaded from JSON after scrape)
-let imageMap = {};
+// Image map (embedded directly — scraped from Bing)
+const imageMap = {"Dell Latitude 3400":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 3410":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 3420":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 3500":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5300 2-in-1":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5400":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5410":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5411":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5420":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5430":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5431":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5480":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5490":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5500":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5520":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5580":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 5590":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7200":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7320":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7400":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7410":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7420":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7450":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7470":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7480":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Latitude 7490":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Vostro 5402":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Precision 7560":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell G5 5505":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Inspiron 5505":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Inspiron 7591":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Precision 5530":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Precision 5550":["https://r.bing.com/rp/kFAqShRrnkQMbH6NYLBYoJ3lq9s.png","https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Precision 5560":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"],"Dell Chromebook 3100":["https://r.bing.com/rp/b0FwJOyobV6NnXq4XV6y--Iohrc.png","/sa/simg/Flag_Feedback.png"]};
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
-async function init() {
-  // Load scraped images
-  try {
-    const resp = await fetch('/tmp/dell_images_scraped.json');
-    if (resp.ok) imageMap = await resp.json();
-  } catch(e) {
-    // images not yet scraped; show placeholders
-  }
+function init() {
 
   // Compute stats
   const totalAsk = inventory.reduce((s, i) => s + i.ask, 0);
@@ -641,8 +634,19 @@ function renderCards(items) {
   grid.innerHTML = items.map(item => {
     const margin = item.ask - item.offer;
     const marginPct = Math.round((margin / item.ask) * 100);
+    // Try exact 3-word match first, then search by prefix
     const modelBase = item.model.split(' ').slice(0,3).join(' ');
-    const imgs = imageMap[modelBase] || [];
+    let imgs = imageMap[modelBase] || [];
+    if (!imgs.length) {
+      // Try 2-word prefix
+      const model2 = item.model.split(' ').slice(0,2).join(' ');
+      for (const key of Object.keys(imageMap)) {
+        if (key.startsWith(model2) || model2.startsWith(key.split(' ').slice(0,2).join(' '))) {
+          imgs = imageMap[key];
+          break;
+        }
+      }
+    }
     const img0 = imgs[0] || '';
 
     const badgeClass = item.badge === 'nib' ? 'nib' : item.badge === 'openbox' ? 'openbox' : item.series === 'latitude7' ? 'new' : '';
