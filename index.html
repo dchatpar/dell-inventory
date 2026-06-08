@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dell Inventory — Latitude | Vostro | Precision | Inspiron</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a25;
+      --card: #1e1e2e;
+      --border: rgba(255,255,255,0.07);
+      --accent: #0066ff;
+      --accent2: #00d4ff;
+      --green: #00c853;
+      --red: #ff3d3d;
+      --text: #f0f0f5;
+      --text2: #8888aa;
+      --text3: #555566;
+      --gold: #ffd700;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #0d0d18 0%, #111128 50%, #0a0d1a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 40px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+    }
+    .header-inner {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-logo {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 22px;
+      color: white;
+      letter-spacing: -1px;
+      box-shadow: 0 4px 20px rgba(0,102,255,0.3);
+    }
+    .brand-text h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: white;
+    }
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text2);
+      margin-top: 2px;
+    }
+    .header-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 20px;
+      text-align: center;
+      min-width: 110px;
+    }
+    .stat-chip .num {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+    }
+    .stat-chip .lbl {
+      font-size: 11px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 2px;
+    }
+
+    /* CONTROLS */
+    .controls {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px 40px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-wrap {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px 12px 44px;
+      font-size: 14px;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,102,255,0.15);
+    }
+    .search-wrap input::placeholder { color: var(--text3); }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text3);
+      font-size: 16px;
+    }
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      color: var(--text2);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: rgba(255,255,255,0.15);
+    }
+    .view-toggle {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .view-toggle button {
+      background: none;
+      border: none;
+      padding: 10px 16px;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .view-toggle button.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* GRID */
+    .grid-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 40px 60px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* CARD */
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .card-img-wrap {
+      position: relative;
+      background: var(--surface2);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .card-img-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: var(--text3);
+    }
+    .card-img-placeholder .icon { font-size: 40px; opacity: 0.4; }
+    .card-img-placeholder .txt { font-size: 12px; opacity: 0.5; }
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+    .card-badge.new { background: var(--green); }
+    .card-badge.openbox { background: #ff9800; }
+    .card-badge.nib { background: var(--gold); color: #111; }
+    .card-body {
+      padding: 18px;
+    }
+    .card-model {
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .card-specs {
+      font-size: 12px;
+      color: var(--text2);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .card-prices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .price-box {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .price-box.ask { border-left: 3px solid var(--red); }
+    .price-box.offer { border-left: 3px solid var(--green); }
+    .price-label {
+      font-size: 10px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 3px;
+    }
+    .price-val {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .price-box.ask .price-val { color: var(--red); }
+    .price-box.offer .price-val { color: var(--green); }
+    .price-margin {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 3px;
+    }
+
+    /* LIST VIEW */
+    .product-grid.list-view {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .product-grid.list-view .product-card {
+      display: grid;
+      grid-template-columns: 200px 1fr auto;
+      align-items: center;
+    }
+    .product-grid.list-view .card-img-wrap { height: 120px; }
+    .product-grid.list-view .card-body { display: flex; align-items: center; gap: 20px; }
+    .product-grid.list-view .card-prices { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .product-grid.list-view .price-box { padding: 14px 20px; }
+
+    /* SECTION HEADER */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      margin-top: 10px;
+    }
+    .section-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-header .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-header .count-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    /* FILTER PANEL */
+    .filter-panel {
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-panel.show { display: flex; }
+    .filter-tag {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-tag:hover, .filter-tag.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* NO RESULTS */
+    .no-results {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text3);
+    }
+    .no-results .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+    .no-results p { font-size: 16px; }
+
+    /* LOADING */
+    .loading-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(10,10,15,0.9);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p { color: var(--text2); font-size: 14px; }
+
+    /* GALLERY MODAL */
+    .gallery-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .gallery-modal.show { display: flex; }
+    .gallery-modal img {
+      max-width: 90vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .gallery-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-nav {
+      display: flex;
+      gap: 16px;
+    }
+    .gallery-nav button {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 24px;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header { padding: 24px 20px; }
+      .header-inner { flex-direction: column; }
+      .header-stats { width: 100%; justify-content: space-between; }
+      .stat-chip { min-width: unset; flex: 1; }
+      .controls { padding: 16px 20px; }
+      .grid-container { padding: 0 20px 40px; }
+      .product-grid { grid-template-columns: 1fr; }
+      .product-grid.list-view .product-card { grid-template-columns: 1fr; }
+      .product-grid.list-view .card-img-wrap { height: 200px; }
+      .product-grid.list-view .card-body { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .header-stats { gap: 8px; }
+      .stat-chip .num { font-size: 18px; }
+      .card-prices { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="brand-logo">D</div>
+      <div class="brand-text">
+        <h1>Dell Refurbished Inventory</h1>
+        <p>Latitude &bull; Vostro &bull; Precision &bull; Inspiron &bull; Chromebook</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-chip">
+        <div class="num" id="total-count">51</div>
+        <div class="lbl">Models</div>
+      </div>
+      <div class="stat-chip">
+        <div class="num" id="avg-discount">—</div>
+        <div class="lbl">Avg Discount</div>
+      </div>
+      <div class="stat-chip">
+        <div class="num" id="total-value">—</div>
+        <div class="lbl">Total Ask</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="searchInput" placeholder="Search model, processor, RAM, storage..." oninput="filterCards()">
+  </div>
+  <button class="filter-btn active" onclick="toggleFilters()">&#9881; Filters</button>
+  <div class="view-toggle">
+    <button class="active" onclick="setView('grid')" id="gridBtn">Grid</button>
+    <button onclick="setView('list')" id="listBtn">List</button>
+  </div>
+</div>
+
+<!-- FILTER PANEL -->
+<div class="filter-panel" id="filterPanel">
+  <span class="filter-tag active" onclick="toggleSeries(this, 'all')">All</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'latitude')">Latitude 3000</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'latitude5')">Latitude 5000</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'latitude7')">Latitude 7000</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'vostro')">Vostro</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'precision')">Precision</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'inspiron')">Inspiron</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'chromebook')">Chromebook</span>
+  <span class="filter-tag" onclick="toggleSeries(this, ' touchscreen')">Touchscreen</span>
+  <span class="filter-tag" onclick="toggleSeries(this, '2-in-1')">2-in-1</span>
+  <span class="filter-tag" onclick="toggleSeries(this, 'New')">New/Open Box</span>
+</div>
+
+<!-- MAIN GRID -->
+<div class="grid-container">
+  <div class="product-grid" id="productGrid"></div>
+  <div class="no-results" id="noResults" style="display:none;">
+    <div class="icon">&#128269;</div>
+    <p>No models match your search</p>
+  </div>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="gallery-modal" id="galleryModal">
+  <button class="gallery-close" onclick="closeGallery()">&#10005;</button>
+  <img id="galleryImg" src="" alt="">
+  <div class="gallery-nav">
+    <button onclick="galleryPrev()">&#8592; Prev</button>
+    <span id="galleryCounter" style="color:var(--text2);font-size:13px;display:flex;align-items:center;">1 / 3</span>
+    <button onclick="galleryNext()">Next &#8594;</button>
+  </div>
+</div>
+
+<script>
+// ── INVENTORY DATA ────────────────────────────────────────────────────────────
+const inventory = [
+  {model:"Dell Latitude 3400 Corei5-8265U 8GB 256GB Win11Pro", ask:225, offer:198, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 3410 Corei5-10210U 8GB 256GB Win11Pro", ask:250, offer:220, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 3420 Corei5-1135G7 8Gb 256GB Win11Pro", ask:275, offer:242, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 3500 Corei5-8265U 8GB 256GB Win11Pro", ask:225, offer:198, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 3500 Corei5-8265U 16GB 256GB Win11Pro", ask:275, offer:242, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 5300 Corei5-8365U 8Gb 256GB Win11Pro 2-in-1 Touchscreen", ask:250, offer:220, badge:"latitude5", series:"latitude5", tags:["2-in-1","touchscreen"]},
+  {model:"Dell Latitude 5300 Corei5-8365U 16Gb 256GB Win11Pro 2-in-1 Touchscreen", ask:275, offer:242, badge:"latitude5", series:"latitude5", tags:["2-in-1","touchscreen"]},
+  {model:"Dell Latitude 5300 Corei5-8365U 16GB 256GB Win11Pro", ask:275, offer:242, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5300 2-in-1 Touch Corei7-8665U 16GB 512GB Win11Pro", ask:325, offer:286, badge:"latitude5", series:"latitude5", tags:["2-in-1","touchscreen"]},
+  {model:"Dell Latitude 5400 Corei5-8365U 16GB 256GB Win11 Pro", ask:275, offer:242, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5400 Corei5-8365U 16GB 512GB Win11 Pro", ask:300, offer:264, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5400 Corei7-8665U 16GB 512GB Win11Pro", ask:325, offer:286, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5410 Corei7-10610U 16GB 256GB Win11Pro", ask:375, offer:330, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5410 Corei7-10610U 16GB 512GB Win11Pro", ask:400, offer:340, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5411 Corei7-10850H 16GB 512GB Win11Pro", ask:400, offer:340, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5420 Corei7-1185G7 16GB 512GB Win11Pro", ask:425, offer:361.25, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5420 Corei7-1165G7 16GB 512GB Win11Pro", ask:425, offer:361.25, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5430 Corei7-1265U 16GB 512GB Win11Pro", ask:475, offer:403.75, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5431 Corei5-1250P 16GB 512GB Win11Pro", ask:350, offer:308, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5480 Corei5-6300U 8GB 170GB Win11Pro", ask:175, offer:154, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 5480 Corei5-7300U 8GB 256GB Win11Pro", ask:200, offer:176, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 5490 Corei5-8250U 16GB 256Gb Win11Pro", ask:275, offer:242, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 5490 Corei7-8650U 16GB 256Gb NVIDIA Geforce MX130 Win11Pro", ask:300, offer:264, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 5500 Corei5-8265U 8GB 256GB Win11Pro", ask:225, offer:198, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5520 Corei5-1145G7 8GB 256GB Win11Pro", ask:275, offer:242, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5520 Corei5-1145G7 16GB 256GB Win11Pro", ask:300, offer:264, badge:"latitude5", series:"latitude5", tags:[]},
+  {model:"Dell Latitude 5580 Corei5-7300U 8GB 256GB Win11Pro", ask:215, offer:189.2, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 5590 Corei5-8250U 8GB 256GB Win11Pro", ask:250, offer:220, badge:"latitude", series:"latitude", tags:[]},
+  {model:"Dell Latitude 7200 Corei5-8265U 8GB 512GB Win11Pro 2-in-1 Touchscreen", ask:325, offer:286, badge:"latitude7", series:"latitude7", tags:["2-in-1","touchscreen"]},
+  {model:"Dell Latitude 7320 Corei7-1185G7 16GB 512GB Win11pro", ask:425, offer:361.25, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7400 Corei7-8665U 16GB 512GB Win11Pro", ask:325, offer:286, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7400 Corei7-8665U 32GB 512GB Win11Pro", ask:375, offer:330, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7410 Corei7-10610U 16GB 512GB Win11Pro", ask:375, offer:330, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7420 Corei7-1185G7 16GB 512GB Win11Pro", ask:425, offer:361.25, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7450 Ultra 7 165U 16GB 1TB New in Box", ask:1075, offer:838.5, badge:"nib", series:"latitude7", tags:["New"]},
+  {model:"Dell Latitude 7470 Corei5-6300U 8GB 170GB Win11Pro", ask:200, offer:176, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7480 Corei5-7300U 8GB 128Gb Win10 Pro", ask:200, offer:176, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7480 Corei5-7300U 8GB 128Gb Win11Pro Touchscreen", ask:220, offer:193.6, badge:"latitude7", series:"latitude7", tags:["touchscreen"]},
+  {model:"Dell Latitude 7480 Corei7-7600U 8GB 128GB Win11pro", ask:215, offer:189.2, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7490 Corei5-8350U 8GB 256GB Win11Pro", ask:225, offer:198, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Latitude 7490 Corei7-8650U 16GB 512GB Win11Pro", ask:325, offer:286, badge:"latitude7", series:"latitude7", tags:[]},
+  {model:"Dell Chromebook 3100 Celeron 4GB 16GB Chrome OS", ask:115, offer:101.2, badge:"chromebook", series:"chromebook", tags:[]},
+  {model:"Dell Latitude 5420 Corei7-11th 16GB 512GB Win11Pro New Open Box", ask:625, offer:512.5, badge:"openbox", series:"latitude5", tags:["New"]},
+  {model:"Dell Vostro 5402 Corei5-1135G7 8GB 256GB Win11Pro", ask:225, offer:198, badge:"vostro", series:"vostro", tags:[]},
+  {model:"Dell Precision 7560 Corei7-11850H 32GB 1TB NVIDIA RTX A2000 4GB Win11Pro", ask:875, offer:717.5, badge:"precision", series:"precision", tags:[]},
+  {model:"Dell G5 5505 AMD Ryzen 5 4600H 8GB 256GB AMD Radeon RX 5600M Win11Pro", ask:375, offer:330, badge:"precision", series:"precision", tags:[]},
+  {model:"Dell Inspiron 5505 AMD Ryzen 5 4500U 8GB 256GB AMD Radeon Graphic 15.6 Win11Pro", ask:250, offer:220, badge:"inspiron", series:"inspiron", tags:[]},
+  {model:"Dell Inspiron 7591 2-in-1 Touch Corei5-10510U 16GB 512GB Win11Pro", ask:425, offer:361.25, badge:"inspiron", series:"inspiron", tags:["2-in-1","touchscreen"]},
+  {model:"Dell Precision 5530 Corei7-8850H 32Gb 512GB NVIDIA Quadro P1000 Touch Win11Pro", ask:450, offer:382.5, badge:"precision", series:"precision", tags:["touchscreen"]},
+  {model:"Dell Precision 5550 Corei7-10850H 32GB 512GB NVIDIA Quadro T1000 Win11Pro 4K", ask:575, offer:488.75, badge:"precision", series:"precision", tags:[]},
+  {model:"Dell Precision 5560 Corei7-11850H 32Gb 512GB NVIDIA RTX A200 4K Touch WinPro", ask:725, offer:594.5, badge:"precision", series:"precision", tags:["touchscreen"]},
+];
+
+// Image map (loaded from JSON after scrape)
+let imageMap = {};
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
+  // Load scraped images
+  try {
+    const resp = await fetch('/tmp/dell_images_scraped.json');
+    if (resp.ok) imageMap = await resp.json();
+  } catch(e) {
+    // images not yet scraped; show placeholders
+  }
+
+  // Compute stats
+  const totalAsk = inventory.reduce((s, i) => s + i.ask, 0);
+  const totalOffer = inventory.reduce((s, i) => s + i.offer, 0);
+  const avgDiscount = Math.round((1 - totalOffer/totalAsk) * 100);
+  document.getElementById('avg-discount').textContent = avgDiscount + '%';
+  document.getElementById('total-value').textContent = '$' + totalAsk.toLocaleString();
+  document.getElementById('total-count').textContent = inventory.length;
+
+  renderCards(inventory);
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderCards(items) {
+  const grid = document.getElementById('productGrid');
+  const noResults = document.getElementById('noResults');
+
+  if (!items.length) {
+    grid.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  noResults.style.display = 'none';
+
+  grid.innerHTML = items.map(item => {
+    const margin = item.ask - item.offer;
+    const marginPct = Math.round((margin / item.ask) * 100);
+    const modelBase = item.model.split(' ').slice(0,3).join(' ');
+    const imgs = imageMap[modelBase] || [];
+    const img0 = imgs[0] || '';
+
+    const badgeClass = item.badge === 'nib' ? 'nib' : item.badge === 'openbox' ? 'openbox' : item.series === 'latitude7' ? 'new' : '';
+    const badgeLabel = item.badge === 'nib' ? 'New in Box' : item.badge === 'openbox' ? 'Open Box' : '';
+
+    return `
+    <div class="product-card" data-series="${item.series}" data-tags="${item.tags.join(',')}" data-model="${item.model.toLowerCase()}">
+      <div class="card-img-wrap" onclick="openGallery('${modelBase}', ${imgs.length})">
+        ${img0
+          ? `<img src="${img0}" alt="${item.model}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="card-img-placeholder" style="display:none">
+               <div class="icon">&#128187;</div><div class="txt">No image</div>
+             </div>`
+          : `<div class="card-img-placeholder">
+               <div class="icon">&#128187;</div><div class="txt">Image coming soon</div>
+             </div>`
+        }
+        ${badgeLabel ? `<span class="card-badge ${badgeClass}">${badgeLabel}</span>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-model">${item.model}</div>
+        <div class="card-specs">${getSpecs(item.model)}</div>
+        <div class="card-prices">
+          <div class="price-box ask">
+            <div class="price-label">Ask Price</div>
+            <div class="price-val">$${item.ask}</div>
+            <div class="price-margin">CAD</div>
+          </div>
+          <div class="price-box offer">
+            <div class="price-label">Our Offer</div>
+            <div class="price-val">$${item.offer}</div>
+            <div class="price-margin">-${marginPct}% margin</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getSpecs(model) {
+  const parts = model.split(' ');
+  const specs = [];
+  for (let i = 0; i < parts.length; i++) {
+    if (['Corei5', 'Corei7', 'Celeron', 'Ryzen', 'Ultra'].some(t => parts[i].startsWith(t))) {
+      const cpu = parts.slice(i, i+2).join(' ').replace(/Pro$/, ' Pro');
+      if (cpu) specs.push(cpu);
+    }
+    if (parts[i] === '8GB' || parts[i] === '16GB' || parts[i] === '32GB') specs.push(parts[i] + ' RAM');
+    if (parts[i] === '256GB' || parts[i] === '512GB' || parts[i] === '1TB') specs.push(parts[i] + ' SSD');
+    if (parts[i].includes('Win11')) specs.push('Windows 11 Pro');
+    if (parts[i].includes('Win10')) specs.push('Windows 10 Pro');
+    if (parts[i].includes('Chrome')) specs.push('Chrome OS');
+  }
+  return specs.slice(0, 4).join(' &bull; ');
+}
+
+// ── FILTER & SEARCH ──────────────────────────────────────────────────────────
+let activeSeries = 'all';
+
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.product-card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const model = card.dataset.model;
+    const series = card.dataset.series;
+    const tags = card.dataset.tags;
+    const matchSeries = activeSeries === 'all' || series === activeSeries || (activeSeries === ' touchscreen' && tags.includes('touchscreen')) || (activeSeries === '2-in-1' && tags.includes('2-in-1')) || (activeSeries === 'New' && tags.includes('New')) || (activeSeries === 'latitude' && ['latitude','latitude5','latitude7'].includes(series));
+    const matchSearch = !q || model.includes(q) || model.toLowerCase().includes(q);
+    if (matchSeries && matchSearch) {
+      card.style.display = '';
+      visible++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+  document.getElementById('total-count').textContent = visible;
+}
+
+function toggleSeries(el, series) {
+  document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  activeSeries = series;
+  filterCards();
+}
+
+function toggleFilters() {
+  document.getElementById('filterPanel').classList.toggle('show');
+}
+
+// ── VIEW TOGGLE ────────────────────────────────────────────────────────────────
+function setView(view) {
+  const grid = document.getElementById('productGrid');
+  grid.classList.toggle('list-view', view === 'list');
+  document.getElementById('gridBtn').classList.toggle('active', view === 'grid');
+  document.getElementById('listBtn').classList.toggle('active', view === 'list');
+}
+
+// ── GALLERY ───────────────────────────────────────────────────────────────────
+let galleryModel = '';
+let galleryIdx = 0;
+let galleryImages = [];
+
+function openGallery(modelBase, count) {
+  galleryModel = modelBase;
+  galleryImages = imageMap[modelBase] || [];
+  galleryIdx = 0;
+  if (galleryImages.length === 0) return;
+  document.getElementById('galleryImg').src = galleryImages[0];
+  document.getElementById('galleryCounter').textContent = `1 / ${galleryImages.length}`;
+  document.getElementById('galleryModal').classList.add('show');
+}
+function galleryPrev() {
+  galleryIdx = (galleryIdx - 1 + galleryImages.length) % galleryImages.length;
+  document.getElementById('galleryImg').src = galleryImages[galleryIdx];
+  document.getElementById('galleryCounter').textContent = `${galleryIdx+1} / ${galleryImages.length}`;
+}
+function galleryNext() {
+  galleryIdx = (galleryIdx + 1) % galleryImages.length;
+  document.getElementById('galleryImg').src = galleryImages[galleryIdx];
+  document.getElementById('galleryCounter').textContent = `${galleryIdx+1} / ${galleryImages.length}`;
+}
+function closeGallery() {
+  document.getElementById('galleryModal').classList.remove('show');
+}
+
+// Close gallery on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeGallery();
+  if (e.key === 'ArrowLeft') galleryPrev();
+  if (e.key === 'ArrowRight') galleryNext();
+});
+
+init();
+</script>
+</body>
+</html>
